@@ -5,13 +5,22 @@ const ora = require("ora");
 const _ = require("lodash");
 const axios = require("axios");
 
-print = console.log;
+const print = console.log;
 const spinner = ora({
   text: "",
   color: "blue",
   hideCursor: false,
 });
 
+// invoke functions...
+// basics();
+// parseFromUrl();
+// extractFromUrl();
+// scrapWikipediaBooks();
+// scrapReactBasedProject();
+scrapNews();
+
+// all functions
 function basics() {
   const $ = cheerio.load(
     `<h2 class="title">Hello world
@@ -56,9 +65,11 @@ async function parseFromUrl() {
   }
 }
 
-async function temp() {
+async function extractFromUrl() {
   spinner.text = "fetching url";
   spinner.start();
+  // this code is from cheerio docs
+  // https://cheerio.js.org/docs/advanced/extract#putting-it-all-together
   const $ = await cheerio.fromURL(
     "https://github.com/cheeriojs/cheerio/releases"
   );
@@ -117,12 +128,15 @@ async function scrapWikipediaBooks() {
   spinner.text = "fetching...";
   spinner.start();
   try {
+    // using axios
     const responce = await axios.get(
       "https://en.wikibooks.org/wiki/Department:Computing"
     );
     spinner.succeed("data fetched");
     spinner.clear();
     const $ = cheerio.load(responce.data);
+
+    // there are no classes in this page, hence extracting data with tags
     const data = $.extract({
       books: [
         {
@@ -150,13 +164,50 @@ async function scrapReactBasedProject() {
   spinner.start();
   try {
     const $ = await cheerio.fromURL(url);
+
+    spinner.succeed("url fetched");
+    spinner.clear();
+    // it will show script tags, no html renderd content
+    console.log($.html());
   } catch (e) {
     print(chalk.red("ERROR", e.message));
   }
 }
 
-// basics();
-// parseFromUrl();
-// temp();
-// scrapWikipediaBooks();
-scrapReactBasedProject();
+async function scrapNews() {
+  // copied code from repo
+  // https://github.com/MichaelWrobelPersonal/News-Blog/tree/master
+  spinner.text = "fetching...";
+  spinner.start();
+  const url = "http://www.newsweek.com";
+  try {
+    const { data } = await axios.get(url);
+    const $ = cheerio.load(data);
+    spinner.succeed("data loaded");
+    spinner.clear();
+
+    const articles = [];
+    // Now, we grab every article tag, and do the following:
+    $("article").each(function (i, element) {
+      // Save an empty result object
+      var result = {};
+
+      // Add the text and href of every link, and save them as properties of the result object
+      result.title = $(this).children("h3").text();
+      result.summary = $(this).children("div.summary").text();
+
+      result.link = url + $(this).children("h3").children("a").attr("href");
+
+      // console.log("cheerio result...\n   title: " + result.title + "\n   summary: " + result.summary + "\n    link: " + result.link)
+
+      // Toss out any empty articles
+      if (result.title != "") {
+        articles.push(result);
+      }
+    });
+    print(chalk.greenBright("news extracted..."));
+    console.log(articles);
+  } catch (e) {
+    print(chalk.red("ERR", e.message));
+  }
+}
