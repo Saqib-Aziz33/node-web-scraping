@@ -2,6 +2,14 @@ const puppeteer = require("puppeteer");
 const chalk = require("chalk");
 const fs = require("fs");
 const ora = require("ora");
+const {
+  scrapWorldPopulation,
+  scheduledScrap,
+} = require("./scrapWorldPopulation");
+const {
+  ScrapeHackerNews,
+  ScrapeHackerNewsMultiPages,
+} = require("./toptalExample");
 
 const print = console.log;
 const spinner = ora({
@@ -11,16 +19,21 @@ const spinner = ora({
 });
 
 /**
- * FUNCTIONS REFERNCES
+ * FUNCTIONS INVOKE
  */
 // DocsExample();
 // takeScreenshot();
-fetchReactBasedSite();
+// fetchReactBasedSite();
 // findGithubUser();
+// scrapWorldPopulation();
+// scheduledScrap();
+ScrapeHackerNews();
+// ScrapeHackerNewsMultiPages();
 
 /**
  * FUNCTIONS DEFINATIONS
  */
+// basic example from docs
 async function DocsExample() {
   const browser = await puppeteer.launch({
     // headless: false,
@@ -51,6 +64,7 @@ async function DocsExample() {
   await browser.close();
 }
 
+// takes screenshot of web page
 async function takeScreenshot() {
   spinner.text = "fetching...";
   spinner.start();
@@ -73,6 +87,7 @@ async function takeScreenshot() {
   // const headTag = await page.$('head')
 }
 
+// fetch client side rendered project
 async function fetchReactBasedSite() {
   const url = "https://serene-semolina-cbb303.netlify.app/";
   // Launch the browser and open a new blank page
@@ -97,6 +112,7 @@ async function fetchReactBasedSite() {
   console.log(html);
 }
 
+// type in input and search
 async function findGithubUser() {
   const url = "https://github-finder-five-phi.vercel.app/";
   // Launch the browser and open a new blank page

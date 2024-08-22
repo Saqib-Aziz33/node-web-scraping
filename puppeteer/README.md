@@ -4,6 +4,7 @@
 - [npm package puppeteer](https://www.npmjs.com/package/cheerio)
 - [npm package puppeteer core](https://www.npmjs.com/package/puppeteer-core?activeTab=readme)
 
-- For parsing and extracting HTML data
-- It will only work with server rendered data
-- cannot scrap client side rendering site, because it cannot run js
+- Headless browser, used for automation
+- it can also scrape client side rendering site
+- [intro to pptr by total](https://www.toptal.com/puppeteer/headless-browser-puppeteer-tutorial)
+- [Scrape world population, each 2 mins](https://www.freecodecamp.org/news/schedule-a-job-in-node-with-nodecron/)
