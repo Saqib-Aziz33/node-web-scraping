@@ -4,7 +4,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node .",
-    "dev": "nodemon ."
+    "dev": "nodemon .",
+    "cheerio": "nodemon cheerio/index.js",
+    "pptr": "nodemon puppeteer/index.js"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +19,7 @@
     "lodash": "^4.17.21",
     "node-cron": "^3.0.3",
     "ora": "^5.4.1",
+    "puppeteer": "^23.1.1",
     "puppeteer-core": "^23.1.0"
   },
   "devDependencies": {
